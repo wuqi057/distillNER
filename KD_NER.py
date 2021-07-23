@@ -1,4 +1,6 @@
 #%% ###############first part : load tagger and predict data, save the distribution result######################
+
+path = '/Users/Wu/Google Drive/'
 import flair
 print(flair.__version__)
 
@@ -10,12 +12,12 @@ teacher = SequenceTagger.load("flair/ner-german-large")
 # import data
 import json
 import numpy as np
-sentences_news = json.load(open("/Users/Wu/Google Drive/NER/sentences.json", 'r', encoding='utf-8'))
+sentences_news = json.load(open("path+data/sentences.json", 'r', encoding='utf-8'))
 
 print(np.histogram([len(s) for s in sentences_news]))
 
 from flair.datasets import CONLL_03_GERMAN
-corpus = CONLL_03_GERMAN(base_path = '/Users/Wu/Google Drive/',encoding= 'latin-1' )
+corpus = CONLL_03_GERMAN(base_path = path ,encoding= 'latin-1' )
 
 print(len(sentences_news))
 print(len(corpus.train))
@@ -40,7 +42,7 @@ for sentence in tqdm(sentences):
 
 #%% save the data(together with the distribution inside the object) to trainset
 import pickle
-with open('/Users/Wu/Google Drive/data.pickle', 'wb') as handle:
+with open(path+'data/data.pickle', 'wb') as handle:
     pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 # #%%
@@ -59,7 +61,7 @@ from sequence_tagger_model_KD import SequenceTagger
 from flair.embeddings import TokenEmbeddings, WordEmbeddings, CharacterEmbeddings,StackedEmbeddings
 from flair.embeddings import TransformerWordEmbeddings
 
-with open('/Users/Wu/Google Drive/data.pickle', 'rb') as handle:
+with open(path+'data/data.pickle', 'rb') as handle:
     data = pickle.load(handle)
 data_train, data_test = train_test_split(data, test_size=0.2, random_state=42)
 data_test, data_dev = train_test_split(data_test, test_size=0.5, random_state=42)
@@ -100,17 +102,17 @@ trainer: ModelTrainer = ModelTrainer(tagger, corpus)
 trainer.train('resources/taggers/example-ner',
               learning_rate=0.1,
               mini_batch_size=10,
-              max_epochs=5,
+              max_epochs=20,
               checkpoint=True,
               )
 #%% resume training
-checkpoint = 'resources/taggers/example-ner/checkpoint.pt'
-trainer = ModelTrainer.load_checkpoint(checkpoint, corpus) #NOTE: ner-large uses optimizer=torch.optim.AdamW
-trainer.train('resources/taggers/example-ner',
-              learning_rate=0.1,
-              mini_batch_size=10,
-              max_epochs=20,
-              checkpoint=True) 
+# checkpoint = 'resources/taggers/example-ner/checkpoint.pt'
+# trainer = ModelTrainer.load_checkpoint(checkpoint, corpus) #NOTE: ner-large uses optimizer=torch.optim.AdamW
+# trainer.train('resources/taggers/example-ner',
+#               learning_rate=0.1,
+#               mini_batch_size=10,
+#               max_epochs=20,
+#               checkpoint=True) 
 
 #NOTE: the trainer of ner-large
 # trainer.train('resources/taggers/ner-german-large',
@@ -134,14 +136,12 @@ print(result_t.main_score)
 print(result_s.main_score)
 
 
-
-
 #%%#########################################################################################################
-# corpus = CONLL_03_GERMAN(base_path = '/Users/Wu/Google Drive/',encoding= 'latin-1' )
-data_train[1].get_spans('ner')[0][0].get_tags_proba_dist('ner')
-# corpus.train[2].get_spans('ner')[0][0]#.get_tags_proba_dist('ner')
-# data_dev[11].get_spans('ner')[0][0].get_tags_proba_dist('ner')
-from flair.data import Sentence
-exp = Sentence("George Washington ging nach Washington")
-student.predict(exp)
-exp.get_spans('ner')
+# # corpus = CONLL_03_GERMAN(base_path = '/Users/Wu/Google Drive/',encoding= 'latin-1' )
+# data_train[1].get_spans('ner')[0][0].get_tags_proba_dist('ner')
+# # corpus.train[2].get_spans('ner')[0][0]#.get_tags_proba_dist('ner')
+# # data_dev[11].get_spans('ner')[0][0].get_tags_proba_dist('ner')
+# from flair.data import Sentence
+# exp = Sentence("George Washington ging nach Washington")
+# student.predict(exp)
+# exp.get_spans('ner')
