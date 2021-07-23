@@ -1,6 +1,7 @@
 #%% ###############first part : load tagger and predict data, save the distribution result######################
 
-path = '/Users/Wu/Google Drive/'
+# path = '/Users/Wu/Google Drive/'
+path='./'
 import flair
 print(flair.__version__)
 from sequence_tagger_model_KD import SequenceTagger
