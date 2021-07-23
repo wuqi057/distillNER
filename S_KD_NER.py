@@ -7,7 +7,8 @@ print(flair.__version__)
 from sequence_tagger_model_KD import SequenceTagger
 
 #%% ##############################second part: load data, and train the model############################ 
-import pickle
+# import pickle
+import pickle5 as pickle
 from flair.data import Corpus
 from flair.datasets import SentenceDataset
 from sklearn.model_selection import train_test_split
