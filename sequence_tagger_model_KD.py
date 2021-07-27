@@ -88,6 +88,7 @@ class SequenceTagger(flair.nn.Model):
             beta: float = 1.0,
             loss_weights: Dict[str, float] = None,
             KD: bool = False, #NOTE: change for KD
+            debug:bool = False,
     ):
         """
         Initializes a SequenceTagger
@@ -112,6 +113,7 @@ class SequenceTagger(flair.nn.Model):
 
         super(SequenceTagger, self).__init__()
         self.KD = KD #NOTE: change for KD
+        self.debug = debug
         self.use_rnn = use_rnn
         self.hidden_size = hidden_size
         self.use_crf: bool = use_crf
@@ -552,7 +554,7 @@ class SequenceTagger(flair.nn.Model):
                                 mini_batch_size=mini_batch_size,
                                 label_name='predicted',
                                 return_loss=True,
-                                all_tag_prob=self.KD)#NOTE
+                                all_tag_prob=self.KD)#NOTE: if KD=true,all_tag_prob = True
             eval_loss += loss
             batch_no += 1
 
@@ -720,7 +722,7 @@ class SequenceTagger(flair.nn.Model):
 
         features = self.linear(sentence_tensor)
         if self.KD == True: #NOTE: change for KD
-            features_dist = F.softmax(features,dim=2)# dim = (batch,len(datapoints),len(tag))
+            features_dist = F.log_softmax(features,dim=2)# dim = (batch,len(datapoints),len(tag))
             return features_dist
 
         else:
@@ -788,6 +790,9 @@ class SequenceTagger(flair.nn.Model):
             tag_dist = torch.tensor(tag_idx_dist, device=flair.device)
             tag_list_dist.append(tag_dist)
 
+        if self.debug:
+            self.tag_list_dist = tag_list_dist
+
         if self.use_crf:
             # pad tags if using batch-CRF decoder
             tags, _ = pad_tensors(tag_list)
@@ -817,7 +822,7 @@ class SequenceTagger(flair.nn.Model):
             ):
                 sentence_feats = sentence_feats[:sentence_length]
                 score += torch.nn.functional.KL_Div(
-                    sentence_feats_dist, sentence_tags_dist
+                    sentence_feats_dist, sentence_tags_dist,log_target=True
                 )
             score /= len(features)
         
