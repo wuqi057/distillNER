@@ -300,7 +300,9 @@ class SequenceTagger(flair.nn.Model):
             rnn_type=rnn_type,
             beta=beta,
             loss_weights=weights,
-            reproject_embeddings=reproject_embeddings,
+            reproject_embeddings=reproject_embeddings, 
+            KD=state['KD'],#NOTE: change for KD
+            debug=state['debug'],#NOTE: change for KD
         )
         model.load_state_dict(state["state_dict"])
         return model
