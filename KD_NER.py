@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sequence_tagger_model_KD import SequenceTagger
 from flair.embeddings import TokenEmbeddings, WordEmbeddings, CharacterEmbeddings,StackedEmbeddings
 from flair.embeddings import TransformerWordEmbeddings
-
+import pickle5 as pickle
 # path = '/Users/Wu/Google Drive/'
 path=''
 with open(path+'data/data_25k.pickle', 'rb') as handle:
