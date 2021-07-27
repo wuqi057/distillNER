@@ -256,6 +256,8 @@ class SequenceTagger(flair.nn.Model):
             "beta": self.beta,
             "weight_dict": self.weight_dict,
             "reproject_embeddings": self.reproject_embeddings,
+            'KD':self.KD, #NOTE: change for KD
+            'debug':self.debug,#NOTE: change for KD
         }
         return model_state
 
