@@ -39,14 +39,14 @@ tagger: SequenceTagger = SequenceTagger(hidden_size=256,
                                         embeddings=embeddings,
                                         tag_dictionary=tag_dictionary,
                                         tag_type=tag_type,
-                                        # KD=True,
+                                        KD=True,
                                         )
 
 from flair.trainers import ModelTrainer
 
 trainer: ModelTrainer = ModelTrainer(tagger, corpus)
 #%% train the model 
-trainer.train('resources/taggers/ner_25k',
+trainer.train('resources/taggers/ner_KD_25k',
               learning_rate=0.1,
               mini_batch_size=10,
               max_epochs=30,
