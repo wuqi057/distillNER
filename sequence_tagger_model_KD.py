@@ -795,7 +795,7 @@ class SequenceTagger(flair.nn.Model):
             tag_list_dist.append(tag_dist)
 
         if self.debug:
-            self.tag_list_dist = tag_list_dist
+            self.tag_list_dist = tag_list_dist#NOTE: add for KD
 
         if self.use_crf:
             # pad tags if using batch-CRF decoder
