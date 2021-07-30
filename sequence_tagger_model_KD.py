@@ -528,7 +528,8 @@ class SequenceTagger(flair.nn.Model):
             embedding_storage_mode: str = "none",
             mini_batch_size: int = 32,
             num_workers: int = 8,
-            wsd_evaluation: bool = False
+            wsd_evaluation: bool = False,
+            verbose: bool = False,#NOTE: added function
     ) -> (Result, float):
 
         # read Dataset into data loader (if list of sentences passed, make Dataset first)
@@ -549,6 +550,8 @@ class SequenceTagger(flair.nn.Model):
         batch_no: int = 0
 
         lines: List[str] = []
+        if verbose:
+            data_loader = tqdm(data_loader)
 
         for batch in data_loader:
 
