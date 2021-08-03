@@ -52,5 +52,3 @@ trainer.train('resources/taggers/ner-german-large1',
               embeddings_storage_mode='none',
               weight_decay=0.,
               )
-
-)
