@@ -3,7 +3,7 @@ import torch
 # 1. get the corpus
 from flair.datasets import CONLL_03_GERMAN
 
-corpus = CONLL_03_GERMAN()
+corpus = CONLL_03_GERMAN(base_path = './',encoding= 'latin-1')
 
 # 2. what tag do we want to predict?
 tag_type = 'ner'
